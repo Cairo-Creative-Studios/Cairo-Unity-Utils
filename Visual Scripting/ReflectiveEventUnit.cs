@@ -56,14 +56,32 @@ public class ReflectiveEventUnit<T> : EventUnit<SerializableDictionary<string, o
         {
             var field = this.GetType()
                 .GetField(param);
-            if (field == null) continue; 
+
+            if (field == null)
+            {
+                Debug.LogWarning($"Parameter {param} was not found as a Value Output to the Reflective Event Unit");
+                continue;
+            }
+
+
             OutputTypeAttribute outputTypeAttribute = field.GetCustomAttribute<OutputTypeAttribute>();
 
             if (outputTypeAttribute != null)
             {
                 Type outputType = outputTypeAttribute.OutputType;
-                object fieldValue = field.GetValue(this);
-                field.SetValue(this, ValueOutput(outputType, Regex.Replace(field.Name, "(?<!^)([A-Z])", " $1")));
+                var outputName = Regex.Replace(field.Name, "(?<!^)([A-Z])", " $1");
+
+                if (valueOutputs.Contains(outputName))
+                {
+                    var fieldValue = (ValueOutput)field.GetValue(this);
+                    flow.SetValue(fieldValue, parameters[param]);
+                }
+
+
+            }
+            else
+            {
+                Debug.LogWarning($"The Field of {this.GetType().Name} for Argument {param} does not have the OutputType attribute.");
             }
         }
     }

@@ -21,7 +21,7 @@ namespace Framework.VisualScripting
             {
                 var actionImplementation = ActionImplementation.GetOrCreateInstance<T>();
                 flow.SetValue(Action, actionImplementation);
-                actionImplementation.PerformAction(ParameterInputs);
+                var args = new object[ParameterInputs.Count];
 
                 int i = 0;
                 foreach (var internalArg in actionImplementation.internalArguments.Keys)
@@ -30,6 +30,12 @@ namespace Framework.VisualScripting
                     i++;
                 }
 
+                for(int j = 0; j < ParameterInputs.Count; j++)
+                {
+                    args[j] = flow.GetValue<object>(ParameterInputs[j]);
+                }
+
+                actionImplementation.PerformAction(args);
                 return Out;
             });
             Out = ControlOutput("");
