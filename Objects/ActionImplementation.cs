@@ -4,6 +4,7 @@ using UnityEngine;
 using NaughtyAttributes;
 using UnityEngine.Pool;
 using Framework;
+using System.Text;
 
 /// <summary>
 /// The base class for Actions that can be performed during Gameplay. 
@@ -28,7 +29,7 @@ public abstract class ActionImplementation<TAction> : ActionImplementation where
 /// <summary>
 /// The base class for Actions that can be performed during Gameplay. 
 /// </summary>
-public abstract class ActionImplementation<TAction, T1> : ActionImplementation where TAction : ActionImplementation, new()
+public abstract class ActionImplementation<TAction, T1> : ActionImplementation where TAction : ActionImplementation, new() where T1 : class 
 {
     public static void Perform(T1 arg)
     {
@@ -47,7 +48,7 @@ public abstract class ActionImplementation<TAction, T1> : ActionImplementation w
 }
 
 public abstract class ActionImplementation<TAction, T1, T2> : ActionImplementation
-    where TAction : ActionImplementation, new()
+    where TAction : ActionImplementation, new() where T1 : class where T2 : class
 {
     public static void Perform(T1 arg1, T2 arg2)
     {
@@ -71,7 +72,7 @@ public abstract class ActionImplementation<TAction, T1, T2> : ActionImplementati
 }
 
 public abstract class ActionImplementation<TAction, T1, T2, T3> : ActionImplementation
-    where TAction : ActionImplementation, new()
+    where TAction : ActionImplementation, new() where T1 : class where T2 : class where T3 : class
 {
     public static void Perform(T1 arg1, T2 arg2, T3 arg3)
     {
@@ -87,9 +88,10 @@ public abstract class ActionImplementation<TAction, T1, T2, T3> : ActionImplemen
         Debug.Log(args[0].GetType().FullName + "," + args[1].GetType().FullName + "," + args[2].GetType().FullName);
         var performMethodInfo = this.GetType().BaseType.GetMethod("Perform");
         Debug.Log(performMethodInfo.GetParameters()[0].ParameterType + ", " + performMethodInfo.GetParameters()[1].ParameterType);
-        Perform((T1)args[0], 
-            (T2)args[1], 
-            (T3)args[2]);
+
+        Perform((T1)args[0],
+                (T2)args[1],
+                (T3)args[2]);
     }
 
     public override void OnPerformGeneric(params object[] args)
@@ -101,7 +103,7 @@ public abstract class ActionImplementation<TAction, T1, T2, T3> : ActionImplemen
 }
 
 public abstract class ActionImplementation<TAction, T1, T2, T3, T4> : ActionImplementation
-    where TAction : ActionImplementation, new()
+    where TAction : ActionImplementation, new() where T1 : class where T2 : class where T3 : class where T4 : class
 {
     public static void Perform(T1 arg1, T2 arg2, T3 arg3, T4 arg4)
     {
@@ -124,7 +126,7 @@ public abstract class ActionImplementation<TAction, T1, T2, T3, T4> : ActionImpl
 }
 
 public abstract class ActionImplementation<TAction, T1, T2, T3, T4, T5> : ActionImplementation
-    where TAction : ActionImplementation, new() 
+    where TAction : ActionImplementation, new() where T1 : class where T2 : class where T3 : class where T4 : class where T5 : class
 {
     public static void Perform(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
     {
