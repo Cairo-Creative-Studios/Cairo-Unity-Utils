@@ -84,10 +84,7 @@ public abstract class ActionImplementation<TAction, T1, T2, T3> : ActionImplemen
 
     public override void PerformAction(params object[] args)
     {
-        Debug.Log(typeof(T1).FullName + "," + typeof(T2).FullName + "," + typeof(T3).FullName);
-        Debug.Log(args[0].GetType().FullName + "," + args[1].GetType().FullName + "," + args[2].GetType().FullName);
         var performMethodInfo = this.GetType().BaseType.GetMethod("Perform");
-        Debug.Log(performMethodInfo.GetParameters()[0].ParameterType + ", " + performMethodInfo.GetParameters()[1].ParameterType);
 
         Perform((T1)args[0],
                 (T2)args[1],
