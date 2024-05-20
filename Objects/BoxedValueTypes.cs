@@ -1,168 +1,165 @@
 using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Cairo.CacheBoxing
 {
-    public abstract class BoxedValueType<T>
+    public class BoxedValueTypeBase
+    { }
+
+    public class BoxedValueType<T> : BoxedValueTypeBase
     {
-        public abstract T Value { get; set; }
+        protected T _value = default;
+        public virtual T Value { get; set; }
+    }
+    
+    public class BoxedObject : BoxedValueType<object>
+    {
+        public override object Value { get => _value; set => _value = value; }
     }
 
     // Int
     public class BoxedInt : BoxedValueType<int>
     {
-        private int _value = 0;
         public override int Value { get => _value; set => _value = value; }
 
+        public static implicit operator int(BoxedInt boxed) => boxed.Value;
         public static implicit operator BoxedInt(int value) => new BoxedInt { Value = value };
-        public static explicit operator int(BoxedInt boxed) => boxed.Value;
     }
 
     // Float
     public class BoxedFloat : BoxedValueType<float>
     {
-        private float _value = 0;
         public override float Value { get => _value; set => _value = value; }
 
-        public static implicit operator BoxedFloat(float value) => new BoxedFloat { Value = value };
         public static explicit operator float(BoxedFloat boxed) => boxed.Value;
+        public static explicit operator BoxedFloat(float value) => new BoxedFloat { Value = value };
     }
 
     // Boolean
-    public class BoxedBool : BoxedValueType<bool>
+    [Serializable]
+    public class BoxedBool : BoxedValueType<Boolean>
     {
-        private bool _value = false;
-        public override bool Value { get => _value; set => _value = value; }
+        public override Boolean Value { get => _value; set => _value = value; }
 
-        public static implicit operator BoxedBool(bool value) => new BoxedBool { Value = value };
-        public static explicit operator bool(BoxedBool boxed) => boxed.Value;
+        public static implicit operator Boolean(BoxedBool boxed) => boxed.Value;
+        public static implicit operator BoxedBool(Boolean value) => new BoxedBool { Value = value };
     }
 
     // Byte
     public class BoxedByte : BoxedValueType<byte>
     {
-        private byte _value = 0;
         public override byte Value { get => _value; set => _value = value; }
 
-        public static implicit operator BoxedByte(byte value) => new BoxedByte { Value = value };
         public static explicit operator byte(BoxedByte boxed) => boxed.Value;
+        public static explicit operator BoxedByte(byte value) => new BoxedByte { Value = value };
     }
 
     // Char
     public class BoxedChar : BoxedValueType<char>
     {
-        private char _value = '\0';
         public override char Value { get => _value; set => _value = value; }
 
-        public static implicit operator BoxedChar(char value) => new BoxedChar { Value = value };
         public static explicit operator char(BoxedChar boxed) => boxed.Value;
+        public static explicit operator BoxedChar(char value) => new BoxedChar { Value = value };
     }
 
     // Decimal
     public class BoxedDecimal : BoxedValueType<decimal>
     {
-        private decimal _value = 0;
         public override decimal Value { get => _value; set => _value = value; }
 
-        public static implicit operator BoxedDecimal(decimal value) => new BoxedDecimal { Value = value };
         public static explicit operator decimal(BoxedDecimal boxed) => boxed.Value;
+        public static explicit operator BoxedDecimal(decimal value) => new BoxedDecimal { Value = value };
     }
 
     // Double
     public class BoxedDouble : BoxedValueType<double>
     {
-        private double _value = 0;
         public override double Value { get => _value; set => _value = value; }
 
-        public static implicit operator BoxedDouble(double value) => new BoxedDouble { Value = value };
         public static explicit operator double(BoxedDouble boxed) => boxed.Value;
+        public static explicit operator BoxedDouble(double value) => new BoxedDouble { Value = value };
     }
 
     // Int16 (short)
     public class BoxedInt16 : BoxedValueType<short>
     {
-        private short _value = 0;
         public override short Value { get => _value; set => _value = value; }
 
-        public static implicit operator BoxedInt16(short value) => new BoxedInt16 { Value = value };
         public static explicit operator short(BoxedInt16 boxed) => boxed.Value;
+        public static explicit operator BoxedInt16(short value) => new BoxedInt16 { Value = value };
     }
 
     // Int32 (int)
     public class BoxedInt32 : BoxedValueType<int>
     {
-        private int _value = 0;
         public override int Value { get => _value; set => _value = value; }
 
-        public static implicit operator BoxedInt32(int value) => new BoxedInt32 { Value = value };
         public static explicit operator int(BoxedInt32 boxed) => boxed.Value;
+        public static explicit operator BoxedInt32(int value) => new BoxedInt32 { Value = value };
     }
 
     // Int64 (long)
     public class BoxedInt64 : BoxedValueType<long>
     {
-        private long _value = 0;
         public override long Value { get => _value; set => _value = value; }
 
-        public static implicit operator BoxedInt64(long value) => new BoxedInt64 { Value = value };
         public static explicit operator long(BoxedInt64 boxed) => boxed.Value;
+        public static explicit operator BoxedInt64(long value) => new BoxedInt64 { Value = value };
     }
 
     // SByte
     public class BoxedSByte : BoxedValueType<sbyte>
     {
-        private sbyte _value = 0;
         public override sbyte Value { get => _value; set => _value = value; }
 
-        public static implicit operator BoxedSByte(sbyte value) => new BoxedSByte { Value = value };
         public static explicit operator sbyte(BoxedSByte boxed) => boxed.Value;
+        public static explicit operator BoxedSByte(sbyte value) => new BoxedSByte { Value = value };
     }
 
     // UInt16
     public class BoxedUInt16 : BoxedValueType<ushort>
     {
-        private ushort _value = 0;
         public override ushort Value { get => _value; set => _value = value; }
 
-        public static implicit operator BoxedUInt16(ushort value) => new BoxedUInt16 { Value = value };
         public static explicit operator ushort(BoxedUInt16 boxed) => boxed.Value;
+        public static explicit operator BoxedUInt16(ushort value) => new BoxedUInt16 { Value = value };
     }
 
     // UInt32
     public class BoxedUInt32 : BoxedValueType<uint>
     {
-        private uint _value = 0;
         public override uint Value { get => _value; set => _value = value; }
 
-        public static implicit operator BoxedUInt32(uint value) => new BoxedUInt32 { Value = value };
         public static explicit operator uint(BoxedUInt32 boxed) => boxed.Value;
+        public static explicit operator BoxedUInt32(uint value) => new BoxedUInt32 { Value = value };
     }
 
     // UInt64
     public class BoxedUInt64 : BoxedValueType<ulong>
     {
-        private ulong _value = 0;
         public override ulong Value { get => _value; set => _value = value; }
 
-        public static implicit operator BoxedUInt64(ulong value) => new BoxedUInt64 { Value = value };
         public static explicit operator ulong(BoxedUInt64 boxed) => boxed.Value;
+        public static explicit operator BoxedUInt64(ulong value) => new BoxedUInt64 { Value = value };
     }
 
     // Vector2
     [Serializable]
     public class BoxedVector2 : BoxedValueType<Vector2>
     {
-        private Vector2 _value = Vector2.zero;
         public override Vector2 Value { get => _value; set => _value = value; }
 
-        public static implicit operator BoxedVector2(Vector2 value) => new BoxedVector2 { Value = value };
-        public static explicit operator Vector2(BoxedVector2 boxed) => boxed.Value;
+        public static implicit operator Vector2(BoxedVector2 boxed) => boxed.Value;
+        public static explicit operator BoxedVector2(Vector2 value) => new BoxedVector2 { Value = value };
+
+
     }
 
     // Vector3
     public class BoxedVector3 : BoxedValueType<Vector3>
     {
-        private Vector3 _value = Vector3.zero;
         public override Vector3 Value { get => _value; set => _value = value; }
 
         public static implicit operator BoxedVector3(Vector3 value) => new BoxedVector3 { Value = value };
@@ -172,7 +169,6 @@ namespace Cairo.CacheBoxing
     // Vector4
     public class BoxedVector4 : BoxedValueType<Vector4>
     {
-        private Vector4 _value = Vector4.zero;
         public override Vector4 Value { get => _value; set => _value = value; }
 
         public static implicit operator BoxedVector4(Vector4 value) => new BoxedVector4 { Value = value };
@@ -182,7 +178,6 @@ namespace Cairo.CacheBoxing
     // Quaternion
     public class BoxedQuaternion : BoxedValueType<Quaternion>
     {
-        private Quaternion _value = Quaternion.identity;
         public override Quaternion Value { get => _value; set => _value = value; }
 
         public static implicit operator BoxedQuaternion(Quaternion value) => new BoxedQuaternion { Value = value };
@@ -192,7 +187,6 @@ namespace Cairo.CacheBoxing
     // Color
     public class BoxedColor : BoxedValueType<Color>
     {
-        private Color _value = Color.black;
         public override Color Value { get => _value; set => _value = value; }
 
         public static implicit operator BoxedColor(Color value) => new BoxedColor { Value = value };
@@ -202,7 +196,6 @@ namespace Cairo.CacheBoxing
     // Rect
     public class BoxedRect : BoxedValueType<Rect>
     {
-        private Rect _value = Rect.zero;
         public override Rect Value { get => _value; set => _value = value; }
 
         public static implicit operator BoxedRect(Rect value) => new BoxedRect { Value = value };
@@ -212,7 +205,6 @@ namespace Cairo.CacheBoxing
     // Bounds
     public class BoxedBounds : BoxedValueType<Bounds>
     {
-        private Bounds _value = new Bounds();
         public override Bounds Value { get => _value; set => _value = value; }
 
         public static implicit operator BoxedBounds(Bounds value) => new BoxedBounds { Value = value };
@@ -222,7 +214,6 @@ namespace Cairo.CacheBoxing
     // RaycastHit
     public class BoxedRaycastHit : BoxedValueType<RaycastHit>
     {
-        private RaycastHit _value = new RaycastHit();
         public override RaycastHit Value { get => _value; set => _value = value; }
 
         public static implicit operator BoxedRaycastHit(RaycastHit value) => new BoxedRaycastHit { Value = value };

@@ -5,6 +5,8 @@ using NaughtyAttributes;
 using UnityEngine.Pool;
 using Framework;
 using System.Text;
+using Cairo.CacheBoxing;
+using System.Security.AccessControl;
 
 /// <summary>
 /// The base class for Actions that can be performed during Gameplay. 
@@ -37,7 +39,31 @@ public abstract class ActionImplementation<TAction, T1> : ActionImplementation w
             ActionImplementations.Add(typeof(TAction), new());
         SystemManager.StartActionCoroutine<TAction>(ActionImplementations[typeof(TAction)], arg);
     }
-    public override void PerformAction(params object[] args) { Perform((T1)args[0]); }
+    public override void PerformAction(params object[] args)
+    {
+        var convertedArgs = new object[args.Length];
+        var types = new Type[1] { typeof(T1) };
+
+        for (int i = 0; i < args.Length; i++)
+        {
+            if (typeof(BoxedValueTypeBase).IsAssignableFrom(types[i]) && !typeof(BoxedValueTypeBase).IsAssignableFrom(args[i].GetType()))
+            {
+                convertedArgs[i] = Activator.CreateInstance(types[i]);
+                convertedArgs[i].SetProperty("Value", args[i]);
+            }
+            else
+            if (!typeof(BoxedValueTypeBase).IsAssignableFrom(types[i]) && typeof(BoxedValueTypeBase).IsAssignableFrom(args[i].GetType()))
+            {
+                convertedArgs[i] = args[i].GetProperty("Value");
+            }
+            else
+            {
+                convertedArgs[i] = args[i];
+            }
+        }
+
+        Perform((T1)convertedArgs[0]);
+    }
 
     public override void OnPerformGeneric(params object[] args)
     {
@@ -60,7 +86,29 @@ public abstract class ActionImplementation<TAction, T1, T2> : ActionImplementati
 
     public override void PerformAction(params object[] args)
     {
-        Perform((T1)args[0], (T2)args[1]);
+        var convertedArgs = new object[args.Length];
+        var types = new Type[2] { typeof(T1), typeof(T2) };
+
+        for (int i = 0; i < args.Length; i++)
+        {
+            if (typeof(BoxedValueTypeBase).IsAssignableFrom(types[i]) && !typeof(BoxedValueTypeBase).IsAssignableFrom(args[i].GetType()))
+            {
+                convertedArgs[i] = Activator.CreateInstance(types[i]);
+                convertedArgs[i].SetProperty("Value", args[i]);
+            }
+            else
+            if (!typeof(BoxedValueTypeBase).IsAssignableFrom(types[i]) && typeof(BoxedValueTypeBase).IsAssignableFrom(args[i].GetType()))
+            {
+                convertedArgs[i] = args[i].GetProperty("Value");
+            }
+            else
+            {
+                convertedArgs[i] = args[i];
+            }
+        }
+
+        Perform((T1)convertedArgs[0],
+                (T2)convertedArgs[1]);
     }
 
     public override void OnPerformGeneric(params object[] args)
@@ -72,7 +120,7 @@ public abstract class ActionImplementation<TAction, T1, T2> : ActionImplementati
 }
 
 public abstract class ActionImplementation<TAction, T1, T2, T3> : ActionImplementation
-    where TAction : ActionImplementation, new() where T1 : class where T2 : class where T3 : class
+    where TAction : ActionImplementation, new() where T1 : new() where T2 : new() where T3 : new()
 {
     public static void Perform(T1 arg1, T2 arg2, T3 arg3)
     {
@@ -84,11 +132,30 @@ public abstract class ActionImplementation<TAction, T1, T2, T3> : ActionImplemen
 
     public override void PerformAction(params object[] args)
     {
-        var performMethodInfo = this.GetType().BaseType.GetMethod("Perform");
+        var convertedArgs = new object[args.Length];
+        var types = new Type[3] { typeof(T1), typeof(T2), typeof(T3) };
 
-        Perform((T1)args[0],
-                (T2)args[1],
-                (T3)args[2]);
+        for(int i = 0; i < args.Length; i++)
+        {
+            if (typeof(BoxedValueTypeBase).IsAssignableFrom(types[i]) && !typeof(BoxedValueTypeBase).IsAssignableFrom(args[i].GetType()))
+            {
+                convertedArgs[i] = Activator.CreateInstance(types[i]);
+                convertedArgs[i].SetProperty("Value", args[i]);
+            }
+            else
+            if (!typeof(BoxedValueTypeBase).IsAssignableFrom(types[i]) && typeof(BoxedValueTypeBase).IsAssignableFrom(args[i].GetType()))
+            {
+                convertedArgs[i] = args[i].GetProperty("Value");
+            }
+            else
+            {
+                convertedArgs[i] = args[i];
+            }
+        }
+
+        Perform((T1)convertedArgs[0],
+                (T2)convertedArgs[1],
+                (T3)convertedArgs[2]);
     }
 
     public override void OnPerformGeneric(params object[] args)
@@ -109,11 +176,35 @@ public abstract class ActionImplementation<TAction, T1, T2, T3, T4> : ActionImpl
 
         SystemManager.StartActionCoroutine<TAction>(ActionImplementations[typeof(TAction)], arg1, arg2, arg3, arg4);
     }
-
     public override void PerformAction(params object[] args)
     {
-        Perform((T1)args[0], (T2)args[1], (T3)args[2], (T4)args[3]);
+        var convertedArgs = new object[args.Length];
+        var types = new Type[4] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) };
+
+        for (int i = 0; i < args.Length; i++)
+        {
+            if (typeof(BoxedValueTypeBase).IsAssignableFrom(types[i]) && !typeof(BoxedValueTypeBase).IsAssignableFrom(args[i].GetType()))
+            {
+                convertedArgs[i] = Activator.CreateInstance(types[i]);
+                convertedArgs[i].SetProperty("Value", args[i]);
+            }
+            else
+            if (!typeof(BoxedValueTypeBase).IsAssignableFrom(types[i]) && typeof(BoxedValueTypeBase).IsAssignableFrom(args[i].GetType()))
+            {
+                convertedArgs[i] = args[i].GetProperty("Value");
+            }
+            else
+            {
+                convertedArgs[i] = args[i];
+            }
+        }
+
+        Perform((T1)convertedArgs[0],
+                (T2)convertedArgs[1],
+                (T3)convertedArgs[2],
+                (T4)convertedArgs[3]);
     }
+
     public override void OnPerformGeneric(params object[] args)
     {
         OnPerform((T1)args[0], (T2)args[1], (T3)args[2], (T4)args[3]);
@@ -133,11 +224,36 @@ public abstract class ActionImplementation<TAction, T1, T2, T3, T4, T5> : Action
 
         SystemManager.StartActionCoroutine<TAction>(ActionImplementations[typeof(TAction)], arg1, arg2, arg3, arg4, arg5);
     }
-
     public override void PerformAction(params object[] args)
     {
-        Perform((T1)args[0], (T2)args[1], (T3)args[2], (T4)args[3], (T5)args[4]);
+        var convertedArgs = new object[args.Length];
+        var types = new Type[5] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5) };
+
+        for (int i = 0; i < args.Length; i++)
+        {
+            if (typeof(BoxedValueTypeBase).IsAssignableFrom(types[i]) && !typeof(BoxedValueTypeBase).IsAssignableFrom(args[i].GetType()))
+            {
+                convertedArgs[i] = Activator.CreateInstance(types[i]);
+                convertedArgs[i].SetProperty("Value", args[i]);
+            }
+            else
+            if (!typeof(BoxedValueTypeBase).IsAssignableFrom(types[i]) && typeof(BoxedValueTypeBase).IsAssignableFrom(args[i].GetType()))
+            {
+                convertedArgs[i] = args[i].GetProperty("Value");
+            }
+            else
+            {
+                convertedArgs[i] = args[i];
+            }
+        }
+
+        Perform((T1)convertedArgs[0],
+                (T2)convertedArgs[1],
+                (T3)convertedArgs[2],
+                (T4)convertedArgs[3],
+                (T5)convertedArgs[4]);
     }
+
     public override void OnPerformGeneric(params object[] args)
     {
         OnPerform((T1)args[0], (T2)args[1], (T3)args[2], (T4)args[3], (T5)args[4]);
